@@ -65,6 +65,17 @@ BG = pygame.transform.scale(
 
 
 # ------------------------------------------------------------
+# SOUND EFFECTS (Using pathlib)
+# ------------------------------------------------------------
+BULLET_SOUND = pygame.mixer.Sound(ASSETS_DIR / "bullet_sound.mp3")
+HIT_SOUND    = pygame.mixer.Sound(ASSETS_DIR / "hit_sound.mp3")
+
+# Optional: Adjust volume (0.0 to 1.0)
+BULLET_SOUND.set_volume(0.5)
+HIT_SOUND.set_volume(0.5)
+
+
+# ------------------------------------------------------------
 # HELPER FUNCTIONS
 # ------------------------------------------------------------
 def collide(obj1, obj2) -> bool:
@@ -167,6 +178,8 @@ class Ship:
         Only allowed if cooldown is ready.
         """
         if self.cool_down_counter == 0 and self.laser_img is not None:
+            BULLET_SOUND.play()  # 🔊 play firing sound
+
             laser = Laser(self.x, self.y, self.laser_img)
             self.lasers.append(laser)
             self.cool_down_counter = 1
@@ -214,6 +227,8 @@ class Player(Ship):
             else:
                 for enemy in enemies[:]:
                     if laser.collision(enemy):
+                        HIT_SOUND.play()  # 🔊 play hit sound
+                        
                         enemies.remove(enemy)
                         if laser in self.lasers:
                             self.lasers.remove(laser)
