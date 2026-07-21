@@ -36,11 +36,11 @@ WHITE_CAR     = pygame.image.load(IMGS_DIR / "white-car.png")
 TRACK        = scale_image(TRACK, 0.8)                # shrink track
 TRACK_BORDER = scale_image(TRACK_BORDER, 0.8)  # same size as track
 GRASS        = scale_image(GRASS, 2.5)
-RED_CAR      = scale_image(RED_CAR, 0.55)
-GREEN_CAR    = scale_image(GREEN_CAR, 0.55)
-GREY_CAR     = scale_image(GREY_CAR, 0.55)
-PURPLE_CAR   = scale_image(PURPLE_CAR, 0.55)
-WHITE_CAR    = scale_image(WHITE_CAR, 0.55)
+RED_CAR      = scale_image(RED_CAR, 0.50)
+GREEN_CAR    = scale_image(GREEN_CAR, 0.50)
+GREY_CAR     = scale_image(GREY_CAR, 0.50)
+PURPLE_CAR   = scale_image(PURPLE_CAR, 0.50)
+WHITE_CAR    = scale_image(WHITE_CAR, 0.50)
 
 # Window matches scaled track
 WIDTH, HEIGHT = TRACK.get_width(), TRACK.get_height()
@@ -81,13 +81,15 @@ class AbstractCar:
         self.y -= vertical
         self.x -= horizontal
 
-
+    def reduce_speed(self):
+        self.vel = max(self.vel - self.acceleration / 2, 0)
+        self.move()
 
 
 
 class PlayerCar(AbstractCar):
     IMG = RED_CAR
-    START_POS = (155, 200)  # not the same as instructors starting point
+    START_POS = (160, 178)  # not the same as instructors starting point
 
 
 # Draw Function
@@ -112,7 +114,13 @@ while run:
 
     draw(WIN, images, player_car)
 
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            run = False
+            break
+
     keys = pygame.key.get_pressed()
+    moved = False
 
     # Rotate Car left and right
     if keys[pygame.K_a]:
@@ -123,13 +131,16 @@ while run:
 
     # Move Car
     if keys[pygame.K_w]:
+        moved = True
         player_car.move_forward()
 
+    # Reduce speed
+    if not moved:
+        player_car.reduce_speed()
 
 
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            run = False
+
+
 
 pygame.quit()
