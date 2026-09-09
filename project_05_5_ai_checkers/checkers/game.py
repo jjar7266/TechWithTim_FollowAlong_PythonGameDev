@@ -1,7 +1,7 @@
 # 14 Hours of Python Game Development - from Beginner to Advanced
 # Instructor: Tech With Tim
 # Followed along and coded by: Jose 'Joe' Ruiz
-# PYTHON CHECKERS TUTORIAL - (Medium)
+# PYTHON CHECKERS TUTORIAL A.I. Version - (Medium)
 # game.py
 
 # Import modules
@@ -74,3 +74,10 @@ class Game:
             self.turn = WHITE
         else:
             self.turn = RED
+
+    def get_board(self):
+        return self.board
+
+    def ai_move(self, board):
+        self.board = board
+        self.change_turn()

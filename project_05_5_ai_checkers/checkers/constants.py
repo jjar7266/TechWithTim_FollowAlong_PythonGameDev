@@ -1,7 +1,7 @@
 # 14 Hours of Python Game Development - from Beginner to Advanced
 # Instructor: Tech With Tim
 # Followed along and coded by: Jose 'Joe' Ruiz
-# PYTHON CHECKERS TUTORIAL - (Medium)
+# PYTHON CHECKERS TUTORIAL A.I. Version - (Medium)
 # constants.py
 
 # THIS FILE WILL HOLD ALL THE CONSTANTS (specific to Checkers)

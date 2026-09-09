@@ -1,7 +1,7 @@
 # 14 Hours of Python Game Development - from Beginner to Advanced
 # Instructor: Tech With Tim
 # Followed along and coded by: Jose 'Joe' Ruiz
-# PYTHON CHECKERS TUTORIAL - (Medium)
+# PYTHON CHECKERS TUTORIAL A.I. Version - (Medium)
 # board.py
 
 # THIS FILE WILL REPRESENT A CHECKERS BOARD
@@ -29,12 +29,25 @@ class Board:
             for col in range(row % 2, COLS, 2):
                 pygame.draw.rect(win, RED, (col *SQUARE_SIZE, row *SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
 
+    def evaluate(self):
+        return self.white_left - self.red_left + (self.white_kings * 0.5 - self.red_kings * 0.5)
+
+    def get_all_pieces(self, color):
+        pieces = []
+        for row in self.board:
+            for piece in row:
+                if piece != 0 and piece.color == color:
+                    pieces.append(piece)
+        return pieces
+
+
+
     def move(self, piece, row, col):
         self.board[piece.row][piece.col], self.board[row][col] = self.board[row][col], self.board[piece.row][piece.col]
         piece.move(row, col)
 
         # DEBUG PRINT
-        #print("Moved piece to row:", row, "col:", col, "color;", piece.color)  
+        #print("Moved piece to row:", row, "col:", col, "color;", piece.color)
 
         if row == ROWS - 1 or row == 0:
             piece.make_king()
@@ -78,12 +91,29 @@ class Board:
                     self.white_left -= 1
 
     def winner(self):
+        # piece elimination
         if self.red_left <= 0:
             return WHITE
         elif self.white_left <= 0:
             return RED
 
+        # ADDED not in the code
+        # no legal move left = loss
+        if not self.has_moves(RED):
+            return WHITE
+
+        if not self.has_moves(WHITE):
+            return RED
+
         return None
+
+    # NEW FUNCTION ADDED not in the code
+    def has_moves(self, color):
+        for piece in self.get_all_pieces(color):
+            moves = self.get_valid_moves(piece)
+            if moves:
+                return True
+        return False
 
     def get_valid_moves(self, piece):
         moves = {}
